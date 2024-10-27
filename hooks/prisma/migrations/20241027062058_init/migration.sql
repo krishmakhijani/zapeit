@@ -21,7 +21,7 @@ CREATE TABLE "Zap" (
 CREATE TABLE "Trigger" (
     "id" TEXT NOT NULL,
     "zapId" TEXT NOT NULL,
-    "triggerId" TEXT NOT NULL,
+    "AvailableTriggerId" TEXT NOT NULL,
     "metadata" JSONB NOT NULL DEFAULT '{}',
 
     CONSTRAINT "Trigger_pkey" PRIMARY KEY ("id")
@@ -31,7 +31,7 @@ CREATE TABLE "Trigger" (
 CREATE TABLE "Action" (
     "id" TEXT NOT NULL,
     "zapId" TEXT NOT NULL,
-    "actionId" TEXT NOT NULL,
+    "AvailableActionId" TEXT NOT NULL,
     "metadata" JSONB NOT NULL DEFAULT '{}',
     "sortingOrder" INTEGER NOT NULL DEFAULT 0,
 
@@ -83,7 +83,7 @@ CREATE UNIQUE INDEX "ZapRunOutbox_zapRunId_key" ON "ZapRunOutbox"("zapRunId");
 ALTER TABLE "Zap" ADD CONSTRAINT "Zap_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Trigger" ADD CONSTRAINT "Trigger_triggerId_fkey" FOREIGN KEY ("triggerId") REFERENCES "AvailableTrigger"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Trigger" ADD CONSTRAINT "Trigger_AvailableTriggerId_fkey" FOREIGN KEY ("AvailableTriggerId") REFERENCES "AvailableTrigger"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Trigger" ADD CONSTRAINT "Trigger_zapId_fkey" FOREIGN KEY ("zapId") REFERENCES "Zap"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -92,7 +92,7 @@ ALTER TABLE "Trigger" ADD CONSTRAINT "Trigger_zapId_fkey" FOREIGN KEY ("zapId") 
 ALTER TABLE "Action" ADD CONSTRAINT "Action_zapId_fkey" FOREIGN KEY ("zapId") REFERENCES "Zap"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Action" ADD CONSTRAINT "Action_actionId_fkey" FOREIGN KEY ("actionId") REFERENCES "AvailableAction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Action" ADD CONSTRAINT "Action_AvailableActionId_fkey" FOREIGN KEY ("AvailableActionId") REFERENCES "AvailableAction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ZapRun" ADD CONSTRAINT "ZapRun_zapId_fkey" FOREIGN KEY ("zapId") REFERENCES "Zap"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
