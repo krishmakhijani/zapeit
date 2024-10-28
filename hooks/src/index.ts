@@ -12,7 +12,7 @@ app.post("/hooks/catch/:userId/:zapId", async (req, res) => {
     const body = req.body;
 
     try{
-        await prisma.$transaction(async tx => {
+        await prisma.$transaction(async (tx) => {
             const run = await tx.zapRun.create({
                 data: {
                     zapId: zapId,
