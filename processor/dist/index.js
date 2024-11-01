@@ -14,7 +14,7 @@ const kafkajs_1 = require("kafkajs");
 const TOPIC_NAME = "zap-events";
 const client = new client_1.PrismaClient();
 const kafka = new kafkajs_1.Kafka({
-    clientId: 'processor',
+    clientId: 'outbox-processor',
     brokers: ['localhost:9092']
 });
 function main() {
@@ -26,16 +26,18 @@ function main() {
                 where: {},
                 take: 10
             });
-            pendingRows.forEach(r => {
-                producer.send({
-                    topic: TOPIC_NAME,
-                    messages: pendingRows.map(r => ({ value: r.zapRunId }))
-                });
+            producer.send({
+                topic: TOPIC_NAME,
+                messages: pendingRows.map(r => {
+                    return {
+                        value: r.zapRunId
+                    };
+                })
             });
             yield client.zapRunOutbox.deleteMany({
                 where: {
                     id: {
-                        in: pendingRows.map(r => r.id)
+                        in: pendingRows.map(x => x.id)
                     }
                 }
             });
