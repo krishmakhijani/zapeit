@@ -1,40 +1,34 @@
-import {PrismaClient} from "@prisma/client";
-import {Kafka} from "kafkajs"
-
+import { PrismaClient } from "@prisma/client";
+import {Kafka} from "kafkajs";
 const TOPIC_NAME = "zap-events"
 const client = new PrismaClient();
 const kafka = new Kafka({
-    clientId: 'processor',
+    clientId: 'outbox-processor',
     brokers: ['localhost:9092']
 })
-
-async function main(){
-
-    const producer = kafka.producer();
+async function main() {
+    const producer =  kafka.producer();
     await producer.connect();
-
-    while(1){
-
+    while(1) {
         const pendingRows = await client.zapRunOutbox.findMany({
-            where:{},
+            where :{},
             take: 10
         })
-
-        pendingRows.forEach(r => {
-            producer.send({
-                topic:TOPIC_NAME,
-                messages:pendingRows.map(r =>({value:r.zapRunId}))
+        producer.send({
+            topic: TOPIC_NAME,
+            messages: pendingRows.map(r => {
+                return {
+                    value: r.zapRunId
+                }
             })
         })
-
         await client.zapRunOutbox.deleteMany({
-            where:{
-                id:{
-                    in:pendingRows.map(r => r.id)
+            where: {
+                id: {
+                    in: pendingRows.map(x => x.id)
                 }
             }
         })
     }
 }
-
-main()
+main();
