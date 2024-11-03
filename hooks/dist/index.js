@@ -45,4 +45,6 @@ app.post("/hooks/catch/:userId/:zapId", (req, res) => __awaiter(void 0, void 0, 
         console.log(err);
     }
 }));
-app.listen(3002);
+app.listen(3002, () => {
+    console.log("Hooks server running on port 3002");
+});
