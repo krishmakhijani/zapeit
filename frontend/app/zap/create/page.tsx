@@ -28,7 +28,7 @@ function useAvailableActionsAndTriggers() {
     }
 }
 
-export default function() {
+export default function CreatePage() {
     const router = useRouter();
     const { availableActions, availableTriggers } = useAvailableActionsAndTriggers();
     const [selectedTrigger, setSelectedTrigger] = useState<{
@@ -76,7 +76,7 @@ export default function() {
                 }} name={selectedTrigger?.name ? selectedTrigger.name : "Trigger"} index={1} />
             </div>
             <div className="w-full pt-2 pb-2">
-                {selectedActions.map((action, index) => <div className="pt-2 flex justify-center"> <ZapCell onClick={() => {
+                {selectedActions.map((action, index) => <div key={action.index} className="pt-2 flex justify-center"> <ZapCell onClick={() => {
                     setSelectedModalIndex(action.index);
                 }} name={action.availableActionName ? action.availableActionName : "Action"} index={action.index} /> </div>)}
             </div>
@@ -162,7 +162,7 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
                     }} />}
 
                     {step === 0 && <div>{availableItems.map(({id, name, image}) => {
-                            return <div onClick={() => {
+                            return <div key={id} onClick={() => {
                                 if (isTrigger) {
                                     onSelect({
                                         id,
@@ -177,7 +177,7 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
                                     })
                                 }
                             }} className="flex border p-4 cursor-pointer hover:bg-slate-100">
-                                <img src={image} width={30} className="rounded-full" /> <div className="flex flex-col justify-center"> {name} </div>
+                                <img src={image} width={30} height={30} alt={`${name} icon`} className="rounded-full"  /> <div className="flex flex-col justify-center"> {name} </div>
                             </div>
                         })}</div>}                    
                 </div>
