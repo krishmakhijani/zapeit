@@ -122,5 +122,3 @@ To start each service, use the following commands:
   cd frontend
   npm run dev
   ```
-
-Feel free to adjust any paths or details according to your project's structure.
